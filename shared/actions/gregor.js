@@ -16,6 +16,7 @@ import {safeTakeEvery, safeTakeLatest} from '../util/saga'
 import {clearErrors} from '../util/pictures'
 import {usernameSelector, loggedInSelector} from '../constants/selectors'
 import {nativeReachabilityEvents} from '../util/reachability'
+import {onFollowNotifications} from './profile'
 
 import type {
   CheckReachability,
@@ -186,6 +187,7 @@ function* handleFollow(items: Array<NonNullGregorItem>): SagaGenerator<any, any>
   if (newFollowUpdates.length) {
     console.log('Checking on new follows:', newFollowUpdates)
     yield put(updateFollowMsgs(newFollowUpdates))
+    yield put(onFollowNotifications(newFollowUpdates))
   }
 }
 
