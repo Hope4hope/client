@@ -181,8 +181,10 @@ function* handleFollow(items: Array<NonNullGregorItem>): SagaGenerator<any, any>
   // eventually we want a clicked notification to lead to onUserClick()
   // $FlowIssue
   const followUpdates = items.filter(isFollowItem)
+  console.log('Checking on follows:', followUpdates)
   const newFollowUpdates = followUpdates.filter(gItem => !seenMsgs[gItem.md.msgID.toString('base64')])
   if (newFollowUpdates.length) {
+    console.log('Checking on new follows:', newFollowUpdates)
     yield put(updateFollowMsgs(newFollowUpdates))
   }
 }
@@ -194,6 +196,7 @@ function* handlePushState(pushAction: PushState): SagaGenerator<any, any> {
     if (nonNullItems.length !== (state.items || []).length) {
       console.warn('Lost some messages in filtering out nonNull gregor items')
     }
+    console.log('handlePushState:', nonNullItems.length)
 
     yield call(handleTLFUpdate, nonNullItems)
     yield call(handleFollow, nonNullItems)
