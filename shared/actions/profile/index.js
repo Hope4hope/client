@@ -216,14 +216,20 @@ function onFollowNotifications(followings: Array<NonNullGregorItem>): Constants.
 }
 
 function* _onFollowNotifications(followings: Array<NonNullGregorItem>): SagaGenerator<any, any> {
-  followings.forEach(f => {
-    console.log('Sending Follow notification: ', f.item.body)
-    put((dispatch: Dispatch) => {
-      NotifyPopup('New Follower!', {body: f.item.body}, -1, f.item.body, () => {
-        dispatch(onUserClick(f.item.body.replace(/ is now following you\./gi, '')))
+  console.log('onFollowNotifications length: ', followings.length)
+  for (var i = 0; i < followings.length; i++) {
+    console.log('onFollowNotifications: ', i)
+    if (followings[i] !== null || followings[i].item !== null) {
+      const body = followings[i].item.body.toString()
+      const sender = body.replace(/ is now following you\./gi, '')
+      console.log('Sending Follow notification from ', sender, ': ', body)
+      put((dispatch: Dispatch) => {
+        NotifyPopup('New Follower!', {body: body}, -1, body, () => {
+          dispatch(onUserClick(sender))
+        })
       })
-    })
-  })
+    }
+  }
 }
 
 function backToProfile(): Constants.BackToProfile {
